@@ -1,0 +1,66 @@
+import React, { useState } from 'react';
+import Card from './Card'; // Asegúrate de importar tu componente Card
+
+const App = () => {
+  const [formData, setFormData] = useState({
+    input1: '',
+    input2: ''
+  });
+  const [error, setError] = useState('');
+  const [showCard, setShowCard] = useState(false); // Estado para controlar la visibilidad del Card
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Validaciones
+    if (formData.input1.trim().length < 3 || formData.input1.trim().startsWith(' ')) {
+      setError('El Input 1 debe tener al menos 3 caracteres y no puede empezar con espacio.');
+      return;
+    }
+    if (formData.input2.trim().length < 6) {
+      setError('El Input 2 debe tener al menos 6 caracteres.');
+      return;
+    }
+    // Si pasa las validaciones, limpiamos el error y mostramos el Card
+    setError('');
+    setShowCard(true); // Mostrar el Card
+  };
+
+  return (
+    <div>
+      <h1>Formulario</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Input 1:</label>
+          <input
+            type="text"
+            name="input1"
+            value={formData.input1}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Input 2:</label>
+          <input
+            type="text"
+            name="input2"
+            value={formData.input2}
+            onChange={handleInputChange}
+          />
+        </div>
+        <button type="submit">Enviar</button>
+      </form>
+      {error && <p>{error}</p>}
+      {showCard && <Card data={formData} />}
+    </div>
+  );
+};
+
+export default App;
